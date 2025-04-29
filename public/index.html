@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Location Fetch</title>
+  </head>
+  <body>
+    <h1>Fetch Your Location</h1>
+    <button id="getLocation">Get Location</button>
+
+    <script>
+      document
+        .getElementById("getLocation")
+        .addEventListener("click", function () {
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+              function (position) {
+                const locationData = {
+                  latitude: position.coords.latitude,
+                  longitude: position.coords.longitude,
+                };
+
+                fetch("https://location-tracker-2ngr.onrender.com/location", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(locationData),
+                })
+                  .then((response) => response.text())
+                  .then((data) => {
+                    console.log(data);
+                  })
+                  .catch((error) => {
+                    console.error("Error:", error);
+                  });
+              },
+              function (error) {
+                alert("Geolocation error: " + error.message);
+              }
+            );
+          } else {
+            alert("Geolocation not supported.");
+          }
+        });
+    </script>
+  </body>
+</html>
